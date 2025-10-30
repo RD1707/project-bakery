@@ -1,0 +1,86 @@
+// Ficheiro: /prisma/schema.prisma
+
+// 1. Configuração do Banco de Dados
+datasource db {
+  provider = "postgresql" // Informa ao Prisma que é PostgreSQL
+  url      = env("DATABASE_URL") // Puxa a URL do ficheiro .env.local
+}
+
+// 2. Configuração do Cliente Prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+// --- NOSSOS DADOS ---
+
+// 3. Modelo do Administrador (para o login da padaria)
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // O hash da senha
+  createdAt DateTime @default(now())
+}
+
+// 4. O CATÁLOGO DE PRODUTOS
+model Produto {
+  id          String   @id @default(cuid())
+  nome        String
+  descricao   String
+  preco       Decimal  // Preço
+  imagemUrl   String?  // Foto do produto
+  
+  // É um item de catálogo (Pão) ou sob encomenda (Bolo)?
+  tipo        TipoProduto @default(CATALOGO) 
+
+  itensPedido ItemPedido[]
+}
+
+// 5. O PEDIDO (O "carrinho" finalizado)
+model Pedido {
+  id        String   @id @default(cuid())
+  status    StatusPedido @default(ANALISE) // O status que o cliente vê
+  valorTotal Decimal
+  createdAt DateTime @default(now())
+  
+  // Informações do cliente (checkout)
+  nomeCliente     String
+  telefoneCliente String
+
+  // Um Pedido tem vários Itens
+  itens ItemPedido[]
+}
+
+// 6. O ITEM DO PEDIDO (O "link" entre Pedido e Produto)
+model ItemPedido {
+  id          String   @id @default(cuid())
+  quantidade  Int
+  
+  // Para encomendas: "Bolo 2kg, recheio de morango"
+  descricaoPersonalizada String? 
+
+  // Chaves de Relação
+  pedidoId    String
+  produtoId   String
+  
+  // Relações
+  pedido      Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produto     Produto  @relation(fields: [produtoId], references: [id])
+
+  @@index([pedidoId])
+  @@index([produtoId])
+}
+
+// Enums (Tipos pré-definidos)
+
+enum TipoProduto {
+  CATALOGO      // Item padrão (Pão)
+  SOB_ENCOMENDA // Item personalizado (Bolo)
+}
+
+enum StatusPedido {
+  ANALISE
+  PRODUCAO
+  CONCLUIDO
+  CANCELADO
+}
