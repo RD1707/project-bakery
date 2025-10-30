@@ -1,65 +1,79 @@
-import Image from "next/image";
+// Ficheiro: app/page.tsx
+import { ProductCard } from '@/components/ProductCard';
+
+// --- DADOS FALSOS (MOCK DATA) ---
+// Mais tarde, isto virá do nosso banco de dados Supabase/Prisma
+const mockProdutos = [
+  {
+    id: '1',
+    nome: 'Pão Francês (Unidade)',
+    descricao: 'Pão francês clássico, crocante por fora e macio por dentro, assado na hora.',
+    preco: 0.75,
+    imagemUrl: '/pao.jpg', // Caminho a partir da pasta 'public'
+  },
+  {
+    id: '2',
+    nome: 'Bolo de Chocolate (Fatia)',
+    descricao: 'Deliciosa fatia de bolo de chocolate com cobertura cremosa de brigadeiro.',
+    preco: 8.50,
+    imagemUrl: '/bolo.jpg',
+  },
+  {
+    id: '3',
+    nome: 'Cento de Salgados (Sortidos)',
+    descricao: 'Uma seleção com 100 dos nossos melhores salgados: coxinhas, bolinhas de queijo e mais.',
+    preco: 120.00,
+    imagemUrl: '/salgados.jpg',
+  },
+  {
+    id: '4',
+    nome: 'Sonho de Creme',
+    descricao: 'Sonho fofinho recheado com creme de baunilha tradicional e polvilhado com açúcar.',
+    preco: 5.00,
+    imagemUrl: '/sonho.jpg',
+  },
+];
+// --- FIM DOS DADOS FALSOS ---
+
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    // Usamos 'container' e 'mx-auto' para centralizar o conteúdo
+    <main className="container mx-auto p-4 md:p-8">
+      {/* Banner/Chamada Principal */}
+      <div className="text-center p-10 bg-amber-100 rounded-lg mb-12">
+        <h1 className="text-4xl font-bold text-amber-900">
+          Bem-vindo à Padaria Delícia
+        </h1>
+        <p className="text-xl text-gray-700 mt-2">
+          O sabor artesanal que conquista.
+        </p>
+      </div>
+
+      {/* Título da Seção */}
+      <h2 className="text-3xl font-semibold mb-6 text-gray-800">
+        Nossos Produtos em Destaque
+      </h2>
+
+      {/* Grelha (Grid) de Produtos */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        
+        {/*
+          Usamos .map() para "mapear" os nossos dados falsos
+          e criar um <ProductCard> para cada item.
+        */}
+        {mockProdutos.map((produto) => (
+          <ProductCard
+            key={produto.id} // Chave única (key) é essencial para o React
+            id={produto.id}
+            nome={produto.nome}
+            descricao={produto.descricao}
+            preco={produto.preco}
+            imagemUrl={produto.imagemUrl}
+          />
+        ))}
+
+      </div>
+    </main>
   );
 }
