@@ -1,16 +1,27 @@
 // Ficheiro: app/layout.tsx
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google'; // Vamos usar a fonte Inter
+import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
-import { Header } from '@/components/Header'; // Importa o Header
-import { Footer } from '@/components/Footer'; // Importa o Footer
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
-// Configura a fonte
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+// Fonte para o corpo do texto - moderna e legível
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+// Fonte para títulos - elegante e sofisticada
+const playfair = Playfair_Display({ 
+  subsets: ['latin'], 
+  variable: '--font-playfair',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'Padaria Delícia - Protótipo',
-  description: 'Protótipo de E-commerce para padaria',
+  title: 'Padaria Delícia - O sabor artesanal que conquista',
+  description: 'Produtos artesanais fresquinhos todos os dias',
 };
 
 export default function RootLayout({
@@ -19,20 +30,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
-      {/* A fonte Inter é aplicada aqui.
-        Adicionamos 'flex flex-col min-h-screen' para garantir
-        que o Footer fique no fim da página, mesmo em páginas curtas.
-      */}
-      <body className={`${inter.variable} font-sans flex flex-col min-h-screen bg-gray-50`}>
-        <Header /> {/* O Header aparecerá em todas as páginas */}
+    <html lang="pt-br" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="font-sans flex flex-col min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50">
+        <Header />
         
-        {/* 'flex-grow' faz o conteúdo principal empurrar o footer para baixo */}
         <div className="flex-grow">
-          {children} {/* Aqui é onde a página (ex: page.tsx) será renderizada */}
+          {children}
         </div>
 
-        <Footer /> {/* O Footer aparecerá em todas as páginas */}
+        <Footer />
       </body>
     </html>
   );
